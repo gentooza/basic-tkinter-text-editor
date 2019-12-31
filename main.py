@@ -29,6 +29,7 @@ import edit_menu
 import format_menu
 import help_menu
 
+
 root = tk.Tk()
 
 app_title = my_globals.BTTE_NAME() + '-'

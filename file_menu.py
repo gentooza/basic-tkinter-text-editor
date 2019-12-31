@@ -21,6 +21,7 @@ along with Basic Simple Text Editor.
 If not, see <https://www.gnu.org/licenses/>.
 '''
 
+import my_globals
 import tkinter as tk
 import tkinter.filedialog as tkfiledialog
 import tkinter.messagebox as tkmessagebox
@@ -57,6 +58,12 @@ class File():
         t = f.read()
         self.text.delete(0.0, tk.END)
         self.text.insert(0.0, t)
+        # TODO: it should be a function
+        app_title = my_globals.BTTE_NAME() + '-'
+        app_title += 'v' + my_globals.BTTE_VERSION() + '-'
+        app_title += f.name
+        self.root.title(app_title)
+        # 
 
     def quit(self):
         entry = tkmessagebox.askyesno(title="Quit",
