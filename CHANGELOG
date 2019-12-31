@@ -3,6 +3,7 @@ V0.0.1 2019/12/31
 + improves
 	- App title and version as constants
 	- showing current file opened in app title
+	- Copy/Cut disabled if we have no selected text
 + bugs
 	-
 + licensing:
