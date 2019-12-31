@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with Basic Simple Text Editor.
 If not, see <https://www.gnu.org/licenses/>.
 '''
-
+import my_globals
 import tkinter as tk
 from tkinter.font import Font
 from tkinter.scrolledtext import ScrolledText
@@ -31,7 +31,11 @@ import help_menu
 
 root = tk.Tk()
 
-root.title("Text Editor-Untiltled")
+app_title = my_globals.BTTE_NAME() + '-'
+app_title += 'v' + my_globals.BTTE_VERSION() + '-'
+app_title += 'Untitled'
+
+root.title(app_title)
 root.geometry("300x250+300+300")
 root.minsize(width=400, height=400)
 
