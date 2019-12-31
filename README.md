@@ -27,7 +27,7 @@ Format menu
 
 # Copyright
 
-Copyright (c) 2015 Punith Patil
+Copyright (C) 2015 Punith Patil <br/>
 Copyright (C) 2019-2020 Joaquín Cuéllar
 
 # License
