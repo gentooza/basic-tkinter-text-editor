@@ -77,7 +77,7 @@ class Edit():
         self.rightClick = tk.Menu(root)
 
 
-def main(root, text, menubar):
+def main(root, main_win, text, menubar):
     objEdit = Edit(text, root)
     editmenu = tk.Menu(menubar)
     editmenu.add_command(label="Copy",

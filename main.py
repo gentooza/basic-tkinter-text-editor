@@ -30,30 +30,42 @@ import format_menu
 import help_menu
 
 
+class main_window:
+
+    def __init__(self, master=None): 
+        self.master = master
+        self.set_app_title(None)
+        self.font = Font(family="Verdana", size=10)
+
+        self.text = ScrolledText(self.master, state='normal',
+                                 height=400, width=400,
+                                 wrap='word',
+                                 font=self.font, pady=2,
+                                 padx=3, undo=True)
+        self.text.pack(fill=tk.Y, expand=1)
+        self.text.focus_set()
+        self.menubar = tk.Menu(self.master)
+
+    def build(self):
+        file_menu.main(self.master, self, self.text, self.menubar)
+        edit_menu.main(self.master, self, self.text, self.menubar)
+        format_menu.main(self.master, self, self.text, self.menubar)
+        help_menu.main(self.master, self, self.text, self.menubar)
+
+    def set_app_title(self, file_name):
+        app_title = my_globals.BTTE_NAME() + '-'
+        app_title += 'v' + my_globals.BTTE_VERSION() + '-'
+        if not file_name:
+            file_name = "Untitled"
+        app_title += file_name
+        self.master.title(app_title)
+
+
 root = tk.Tk()
-
-app_title = my_globals.BTTE_NAME() + '-'
-app_title += 'v' + my_globals.BTTE_VERSION() + '-'
-app_title += 'Untitled'
-
-root.title(app_title)
 root.geometry("300x250+300+300")
 root.minsize(width=400, height=400)
 
-font = Font(family="Verdana", size=10)
+app_win = main_window(root)
+app_win.build()
 
-text = ScrolledText(root, state='normal',
-                    height=400, width=400,
-                    wrap='word',
-                    font=font, pady=2,
-                    padx=3, undo=True)
-text.pack(fill=tk.Y, expand=1)
-text.focus_set()
-
-menubar = tk.Menu(root)
-
-file_menu.main(root, text, menubar)
-edit_menu.main(root, text, menubar)
-format_menu.main(root, text, menubar)
-help_menu.main(root, text, menubar)
 root.mainloop()

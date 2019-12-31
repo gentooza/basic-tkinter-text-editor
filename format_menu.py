@@ -105,7 +105,7 @@ class Format():
         self.text.insert(tk.INSERT, date, "a")
 
 
-def main(root, text, menubar):
+def main(root, main_win, text, menubar):
     objFormat = Format(text)
     fontoptions = families(root)
     font = Font(family="Verdana", size=10)

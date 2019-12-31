@@ -32,7 +32,7 @@ class Help():
                  message="This a simple text editor implemented in Python's Tkinter")
 
 
-def main(root, text, menubar):
+def main(root, main_win, text, menubar):
     help = Help()
 
     helpMenu = tk.Menu(menubar)

@@ -58,12 +58,7 @@ class File():
         t = f.read()
         self.text.delete(0.0, tk.END)
         self.text.insert(0.0, t)
-        # TODO: it should be a function
-        app_title = my_globals.BTTE_NAME() + '-'
-        app_title += 'v' + my_globals.BTTE_VERSION() + '-'
-        app_title += f.name
-        self.root.title(app_title)
-        # 
+        self.main_win.set_app_title(f.name)
 
     def quit(self):
         entry = tkmessagebox.askyesno(title="Quit",
@@ -71,15 +66,16 @@ class File():
         if entry is True:
             self.root.destroy()
 
-    def __init__(self, text, root):
+    def __init__(self, text, root, main_win):
         self.filename = None
         self.text = text
         self.root = root
+        self.main_win = main_win
 
 
-def main(root, text, menubar):
+def main(root, main_win, text, menubar):
     filemenu = tk.Menu(menubar)
-    objFile = File(text, root)
+    objFile = File(text, root, main_win)
     filemenu.add_command(label="New",
                          command=objFile.newFile)
     filemenu.add_command(label="Open",
