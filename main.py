@@ -32,7 +32,7 @@ import help_menu
 
 class main_window:
 
-    def __init__(self, master=None): 
+    def __init__(self, master=None):
         self.master = master
         self.set_app_title(None)
         self.font = Font(family="Verdana", size=10)
@@ -45,12 +45,18 @@ class main_window:
         self.text.pack(fill=tk.Y, expand=1)
         self.text.focus_set()
         self.menubar = tk.Menu(self.master)
+        self.selected_text = None
+        '''configure events'''
+        self.events()
 
     def build(self):
-        file_menu.main(self.master, self, self.text, self.menubar)
-        edit_menu.main(self.master, self, self.text, self.menubar)
-        format_menu.main(self.master, self, self.text, self.menubar)
-        help_menu.main(self.master, self, self.text, self.menubar)
+        file_menu.main(self.master, self, self.text)
+        self.edit_menu = edit_menu.main(self.master, self, self.text)
+        format_menu.main(self.master, self, self.text)
+        help_menu.main(self.master, self, self.text)
+
+    def events(self):
+        self.text.bind("<<Selection>>", self.ev_selected_text)
 
     def set_app_title(self, file_name):
         app_title = my_globals.BTTE_NAME() + '-'
@@ -59,6 +65,17 @@ class main_window:
             file_name = "Untitled"
         app_title += file_name
         self.master.title(app_title)
+
+    '''EVENTS'''
+    def ev_selected_text(self, event):
+        old_selected_text = self.selected_text
+        try:
+            self.selected_text = self.text.get(tk.SEL_FIRST, tk.SEL_LAST)
+        except:
+            self.selected_text = None
+        ''' update edit menu'''
+        if old_selected_text != self.selected_text:
+            self.edit_menu.update()
 
 
 root = tk.Tk()

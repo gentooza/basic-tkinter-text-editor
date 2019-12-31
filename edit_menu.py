@@ -29,33 +29,58 @@ import tkinter.simpledialog as tksimpledialog
 
 class Edit():
 
-    def popup(self, event):
+    def build_edit_menu(self):
+        self.editmenu.add_command(label="Copy",
+                                  command=self.ev_copy,
+                                  accelerator="Ctrl+C")
+        self.editmenu.add_command(label="Cut",
+                                  command=self.ev_cut,
+                                  accelerator="Ctrl+X")
+        self.editmenu.add_command(label="Paste",
+                                  command=self.ev_paste,
+                                  accelerator="Ctrl+V")
+        self.editmenu.add_command(label="Undo",
+                                  command=self.ev_undo,
+                                  accelerator="Ctrl+Z")
+        self.editmenu.add_command(label="Redo",
+                                  command=self.ev_redo,
+                                  accelerator="Ctrl+Y")
+        self.editmenu.add_command(label="Find",
+                                  command=self.ev_find,
+                                  accelerator="Ctrl+F")
+        self.editmenu.add_separator()
+        self.editmenu.add_command(label="Select All",
+                                  command=self.ev_selectAll,
+                                  accelerator="Ctrl+A")
+        self.main_win.menubar.add_cascade(label="Edit", menu=self.editmenu)
+
+    def ev_popup(self, event):
         self.rightClick.post(event.x_root, event.y_root)
 
-    def copy(self, *args):
+    def ev_copy(self, *args):
         sel = self.text.selection_get()
         self.clipboard = sel
 
-    def cut(self, *args):
+    def ev_cut(self, *args):
         sel = self.text.selection_get()
         self.clipboard = sel
         self.text.delete(tk.SEL_FIRST, tk.SEL_LAST)
 
-    def paste(self, *args):
+    def ev_paste(self, *args):
         self.text.insert(tk.INSERT, self.clipboard)
 
-    def selectAll(self, *args):
+    def ev_selectAll(self, *args):
         self.text.tag_add(tk.SEL, "1.0", tk.END)
         self.text.mark_set(0.0, tk.END)
         self.text.see(tk.INSERT)
 
-    def undo(self, *args):
+    def ev_undo(self, *args):
         self.text.edit_undo()
 
-    def redo(self, *args):
+    def ev_redo(self, *args):
         self.text.edit_redo()
 
-    def find(self, *args):
+    def ev_find(self, *args):
         self.text.tag_remove('found', '1.0', tk.END)
         target = tksimpledialog.askstring('Find', 'Search String:')
         if target:
@@ -71,56 +96,51 @@ class Edit():
                                  foreground='white',
                                  background='blue')
 
-    def __init__(self, text, root):
+    def update(self):
+        if ((not self.main_win.selected_text)
+                or (self.main_win.selected_text == '')):
+            self.editmenu.entryconfig("Copy", state="disabled")
+            self.editmenu.entryconfig("Cut", state="disabled")
+            self.rightClick.entryconfig(1, state="disabled")
+            self.rightClick.entryconfig(2, state="disabled")
+        else:
+            self.editmenu.entryconfig("Copy", state="normal")
+            self.editmenu.entryconfig("Cut", state="normal")
+            self.rightClick.entryconfig(1, state="normal")
+            self.rightClick.entryconfig(2, state="normal")
+
+    def __init__(self, text, root, main_win):
         self.clipboard = None
         self.text = text
+        self.main_win = main_win
         self.rightClick = tk.Menu(root)
+        self.editmenu = tk.Menu(main_win.menubar)
+        self.build_edit_menu()
+
+        root.bind_all("<Control-z>", self.ev_undo)
+        root.bind_all("<Control-y>", self.ev_redo)
+        root.bind_all("<Control-f>", self.ev_find)
+        root.bind_all("Control-a", self.ev_selectAll)
+
+        self.rightClick.add_command(label="Copy", command=self.ev_copy)
+        self.rightClick.add_command(label="Cut", command=self.ev_cut)
+        self.rightClick.add_command(label="Paste", command=self.ev_paste)
+        self.rightClick.add_separator()
+        self.rightClick.add_command(label="Select All",
+                                    command=self.ev_selectAll)
+        self.rightClick.bind("<Control-q>", self.ev_selectAll)
+
+        self.text.bind("<Button-3>", self.ev_popup)
+
+        root.config(menu=main_win.menubar)
+
+        self.update()
 
 
-def main(root, main_win, text, menubar):
-    objEdit = Edit(text, root)
-    editmenu = tk.Menu(menubar)
-    editmenu.add_command(label="Copy",
-                         command=objEdit.copy,
-                         accelerator="Ctrl+C")
-    editmenu.add_command(label="Cut",
-                         command=objEdit.cut,
-                         accelerator="Ctrl+X")
-    editmenu.add_command(label="Paste",
-                         command=objEdit.paste,
-                         accelerator="Ctrl+V")
-    editmenu.add_command(label="Undo",
-                         command=objEdit.undo,
-                         accelerator="Ctrl+Z")
-    editmenu.add_command(label="Redo",
-                         command=objEdit.redo,
-                         accelerator="Ctrl+Y")
-    editmenu.add_command(label="Find",
-                         command=objEdit.find,
-                         accelerator="Ctrl+F")
-    editmenu.add_separator()
-    editmenu.add_command(label="Select All",
-                         command=objEdit.selectAll,
-                         accelerator="Ctrl+A")
-    menubar.add_cascade(label="Edit", menu=editmenu)
+def main(root, main_win, text):
+    objEdit = Edit(text, root, main_win)
 
-    root.bind_all("<Control-z>", objEdit.undo)
-    root.bind_all("<Control-y>", objEdit.redo)
-    root.bind_all("<Control-f>", objEdit.find)
-    root.bind_all("Control-a", objEdit.selectAll)
-
-    objEdit.rightClick.add_command(label="Copy", command=objEdit.copy)
-    objEdit.rightClick.add_command(label="Cut", command=objEdit.cut)
-    objEdit.rightClick.add_command(label="Paste", command=objEdit.paste)
-    objEdit.rightClick.add_separator()
-    objEdit.rightClick.add_command(label="Select All",
-                                   command=objEdit.selectAll)
-    objEdit.rightClick.bind("<Control-q>", objEdit.selectAll)
-
-    text.bind("<Button-3>", objEdit.popup)
-
-    root.config(menu=menubar)
-
+    return objEdit
 
 if __name__ == "__main__":
     print("Please run 'main.py'")

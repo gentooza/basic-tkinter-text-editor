@@ -73,9 +73,10 @@ class File():
         self.main_win = main_win
 
 
-def main(root, main_win, text, menubar):
-    filemenu = tk.Menu(menubar)
+def main(root, main_win, text):
+    filemenu = tk.Menu(main_win.menubar)
     objFile = File(text, root, main_win)
+
     filemenu.add_command(label="New",
                          command=objFile.newFile)
     filemenu.add_command(label="Open",
@@ -87,9 +88,9 @@ def main(root, main_win, text, menubar):
     filemenu.add_separator()
     filemenu.add_command(label="Quit",
                          command=objFile.quit)
-    menubar.add_cascade(label="File",
+    main_win.menubar.add_cascade(label="File",
                         menu=filemenu)
-    root.config(menu=menubar)
+    root.config(menu=main_win.menubar)
 
 
 if __name__ == "__main__":

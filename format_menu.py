@@ -105,11 +105,11 @@ class Format():
         self.text.insert(tk.INSERT, date, "a")
 
 
-def main(root, main_win, text, menubar):
+def main(root, main_win, text):
     objFormat = Format(text)
     fontoptions = families(root)
     font = Font(family="Verdana", size=10)
-    formatMenu = tk.Menu(menubar)
+    formatMenu = tk.Menu(main_win.menubar)
     fsubmenu = tk.Menu(formatMenu, tearoff=0)
     ssubmenu = tk.Menu(formatMenu, tearoff=0)
 
@@ -142,7 +142,7 @@ def main(root, main_win, text, menubar):
                            accelerator="Ctrl+T")
     formatMenu.add_command(label="Add Date",
                            command=objFormat.addDate)
-    menubar.add_cascade(label="Format",
+    main_win.menubar.add_cascade(label="Format",
                         menu=formatMenu)
 
     root.bind_all("<Control-b>", objFormat.bold)
@@ -153,7 +153,7 @@ def main(root, main_win, text, menubar):
     root.grid_columnconfigure(0, weight=1)
     root.resizable(True, True)
 
-    root.config(menu=menubar)
+    root.config(menu=main_win.menubar)
 
 
 if __name__ == "__main":

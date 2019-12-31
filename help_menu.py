@@ -32,14 +32,14 @@ class Help():
                  message="This a simple text editor implemented in Python's Tkinter")
 
 
-def main(root, main_win, text, menubar):
+def main(root, main_win, text):
     help = Help()
 
-    helpMenu = tk.Menu(menubar)
+    helpMenu = tk.Menu(main_win.menubar)
     helpMenu.add_command(label="About", command=help.about)
-    menubar.add_cascade(label="Help", menu=helpMenu)
+    main_win.menubar.add_cascade(label="Help", menu=helpMenu)
 
-    root.config(menu=menubar)
+    root.config(menu=main_win.menubar)
 
 
 if __name__ == "__main__":
