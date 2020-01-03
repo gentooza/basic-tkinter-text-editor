@@ -27,60 +27,60 @@ import tkinter.simpledialog as tksimpledialog
 # from tkinter.messagebox import *
 
 
-class Edit():
+class editMenu():
 
     def build_edit_menu(self):
-        self.editmenu.add_command(label="Copy",
-                                  command=self.ev_copy,
+        self.editMenu.add_command(label="Copy",
+                                  command=self.copy,
                                   accelerator="Ctrl+C")
-        self.editmenu.add_command(label="Cut",
-                                  command=self.ev_cut,
+        self.editMenu.add_command(label="Cut",
+                                  command=self.cut,
                                   accelerator="Ctrl+X")
-        self.editmenu.add_command(label="Paste",
-                                  command=self.ev_paste,
+        self.editMenu.add_command(label="Paste",
+                                  command=self.paste,
                                   accelerator="Ctrl+V")
-        self.editmenu.add_command(label="Undo",
-                                  command=self.ev_undo,
+        self.editMenu.add_command(label="Undo",
+                                  command=self.undo,
                                   accelerator="Ctrl+Z")
-        self.editmenu.add_command(label="Redo",
-                                  command=self.ev_redo,
+        self.editMenu.add_command(label="Redo",
+                                  command=self.redo,
                                   accelerator="Ctrl+Y")
-        self.editmenu.add_command(label="Find",
-                                  command=self.ev_find,
+        self.editMenu.add_command(label="Find",
+                                  command=self.find,
                                   accelerator="Ctrl+F")
-        self.editmenu.add_separator()
-        self.editmenu.add_command(label="Select All",
-                                  command=self.ev_selectAll,
+        self.editMenu.add_separator()
+        self.editMenu.add_command(label="Select All",
+                                  command=self.select_all,
                                   accelerator="Ctrl+A")
-        self.main_win.menubar.add_cascade(label="Edit", menu=self.editmenu)
+        self.mainWin.menubar.add_cascade(label="Edit", menu=self.editMenu)
 
-    def ev_popup(self, event):
+    def popup(self, event):
         self.rightClick.post(event.x_root, event.y_root)
 
-    def ev_copy(self, *args):
+    def copy(self, *args):
         sel = self.text.selection_get()
         self.clipboard = sel
 
-    def ev_cut(self, *args):
+    def cut(self, *args):
         sel = self.text.selection_get()
         self.clipboard = sel
         self.text.delete(tk.SEL_FIRST, tk.SEL_LAST)
 
-    def ev_paste(self, *args):
+    def paste(self, *args):
         self.text.insert(tk.INSERT, self.clipboard)
 
-    def ev_selectAll(self, *args):
+    def select_all(self, *args):
         self.text.tag_add(tk.SEL, "1.0", tk.END)
         self.text.mark_set(0.0, tk.END)
         self.text.see(tk.INSERT)
 
-    def ev_undo(self, *args):
+    def undo(self, *args):
         self.text.edit_undo()
 
-    def ev_redo(self, *args):
+    def redo(self, *args):
         self.text.edit_redo()
 
-    def ev_find(self, *args):
+    def find(self, *args):
         self.text.tag_remove('found', '1.0', tk.END)
         target = tksimpledialog.askstring('Find', 'Search String:')
         if target:
@@ -97,50 +97,41 @@ class Edit():
                                  background='blue')
 
     def update(self):
-        if ((not self.main_win.selected_text)
-                or (self.main_win.selected_text == '')):
-            self.editmenu.entryconfig("Copy", state="disabled")
-            self.editmenu.entryconfig("Cut", state="disabled")
+        if ((not self.mainWin.selectedText)
+                or (self.mainWin.selectedText == '')):
+            self.editMenu.entryconfig("Copy", state="disabled")
+            self.editMenu.entryconfig("Cut", state="disabled")
             self.rightClick.entryconfig(1, state="disabled")
             self.rightClick.entryconfig(2, state="disabled")
         else:
-            self.editmenu.entryconfig("Copy", state="normal")
-            self.editmenu.entryconfig("Cut", state="normal")
+            self.editMenu.entryconfig("Copy", state="normal")
+            self.editMenu.entryconfig("Cut", state="normal")
             self.rightClick.entryconfig(1, state="normal")
             self.rightClick.entryconfig(2, state="normal")
 
-    def __init__(self, text, root, main_win):
+    def __init__(self, text, root, mainWin):
         self.clipboard = None
         self.text = text
-        self.main_win = main_win
+        self.mainWin = mainWin
         self.rightClick = tk.Menu(root)
-        self.editmenu = tk.Menu(main_win.menubar)
+        self.editMenu = tk.Menu(mainWin.menubar, tearoff=0)
         self.build_edit_menu()
 
-        root.bind_all("<Control-z>", self.ev_undo)
-        root.bind_all("<Control-y>", self.ev_redo)
-        root.bind_all("<Control-f>", self.ev_find)
-        root.bind_all("Control-a", self.ev_selectAll)
+        root.bind_all("<Control-z>", self.undo)
+        root.bind_all("<Control-y>", self.redo)
+        root.bind_all("<Control-f>", self.find)
+        root.bind_all("Control-a", self.select_all)
 
-        self.rightClick.add_command(label="Copy", command=self.ev_copy)
-        self.rightClick.add_command(label="Cut", command=self.ev_cut)
-        self.rightClick.add_command(label="Paste", command=self.ev_paste)
+        self.rightClick.add_command(label="Copy", command=self.copy)
+        self.rightClick.add_command(label="Cut", command=self.cut)
+        self.rightClick.add_command(label="Paste", command=self.paste)
         self.rightClick.add_separator()
         self.rightClick.add_command(label="Select All",
-                                    command=self.ev_selectAll)
-        self.rightClick.bind("<Control-q>", self.ev_selectAll)
+                                    command=self.select_all)
+        self.rightClick.bind("<Control-q>", self.select_all)
 
-        self.text.bind("<Button-3>", self.ev_popup)
+        self.text.bind("<Button-3>", self.popup)
 
-        root.config(menu=main_win.menubar)
+        root.config(menu=mainWin.menubar)
 
         self.update()
-
-
-def main(root, main_win, text):
-    objEdit = Edit(text, root, main_win)
-
-    return objEdit
-
-if __name__ == "__main__":
-    print("Please run 'main.py'")

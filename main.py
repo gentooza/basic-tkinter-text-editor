@@ -30,7 +30,7 @@ import format_menu
 import help_menu
 
 
-class main_window:
+class mainWindow:
 
     def __init__(self, master=None):
         self.master = master
@@ -45,13 +45,13 @@ class main_window:
         self.text.pack(fill=tk.Y, expand=1)
         self.text.focus_set()
         self.menubar = tk.Menu(self.master)
-        self.selected_text = None
+        self.selectedText = None
         '''configure events'''
         self.events()
 
     def build(self):
         self.fileMenu = file_menu.fileMenu(self.text, self.master, self)
-        self.edit_menu = edit_menu.main(self.master, self, self.text)
+        self.editMenu = edit_menu.editMenu(self.text, self.master, self)
         format_menu.main(self.master, self, self.text)
         help_menu.main(self.master, self, self.text)
 
@@ -68,13 +68,13 @@ class main_window:
 
     '''EVENTS'''
     def ev_selected_text(self, event):
-        old_selected_text = self.selected_text
+        oldSelectedText = self.selectedText
         try:
-            self.selected_text = self.text.get(tk.SEL_FIRST, tk.SEL_LAST)
+            self.selectedText = self.text.get(tk.SEL_FIRST, tk.SEL_LAST)
         except:
-            self.selected_text = None
+            self.selectedText = None
         ''' update edit menu'''
-        if old_selected_text != self.selected_text:
+        if oldSelectedText != self.selectedText:
             self.edit_menu.update()
 
 
@@ -82,7 +82,7 @@ root = tk.Tk()
 root.geometry("300x250+300+300")
 root.minsize(width=400, height=400)
 
-app_win = main_window(root)
-app_win.build()
+appWin = mainWindow(root)
+appWin.build()
 
 root.mainloop()
