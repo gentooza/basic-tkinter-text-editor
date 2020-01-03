@@ -56,7 +56,9 @@ class mainWindow:
         self.helpMenu = help_menu.helpMenu(self.text, self.master, self)
 
     def events(self):
-        self.text.bind("<<Selection>>", self.ev_selected_text)
+        self.text.bind("<<Selection>>", self.selected_text)
+        self.master.bind("<Button-1>", self.mouse_click)
+        self.menubar.bind("<Button-1>", self.mouse_click)
 
     def set_app_title(self, file_name):
         app_title = my_globals.BTTE_NAME() + '-'
@@ -67,7 +69,7 @@ class mainWindow:
         self.master.title(app_title)
 
     '''EVENTS'''
-    def ev_selected_text(self, event):
+    def selected_text(self, event):
         oldSelectedText = self.selectedText
         try:
             self.selectedText = self.text.get(tk.SEL_FIRST, tk.SEL_LAST)
@@ -77,6 +79,9 @@ class mainWindow:
         if oldSelectedText != self.selectedText:
             self.editMenu.update()
 
+    def mouse_click(self, event):
+        self.editMenu.rightClick.unpost()
+
 
 root = tk.Tk()
 root.geometry("300x250+300+300")
@@ -84,5 +89,4 @@ root.minsize(width=400, height=400)
 
 appWin = mainWindow(root)
 appWin.build()
-
 root.mainloop()
