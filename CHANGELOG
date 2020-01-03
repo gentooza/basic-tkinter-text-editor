@@ -4,8 +4,9 @@ V0.0.1 2019/12/31
 	- App title and version as constants
 	- showing current file opened in app title
 	- Copy/Cut disabled if we have no selected text
+	- style: textbox background colour, menus with tearoff=0 option, flat menu style...
 + bugs
-	-
+	- popup now disapears when mouse left-clicking out
 + licensing:
 	- upgraded to GPLv3+
 	- correct license headers, and licensing practises
