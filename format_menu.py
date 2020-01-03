@@ -26,20 +26,16 @@ from tkinter.colorchooser import askcolor
 from tkinter.font import Font, families
 # from ScrolledText import *
 import time
-import sys
 
 
-class Format():
+class formatMenu():
 
-    def __init__(self, text):
-        self.text = text
-
-    def changeBg(self):
+    def change_bg(self):
         (triple, hexstr) = askcolor()
         if hexstr:
             self.text.config(bg=hexstr)
 
-    def changeFg(self):
+    def change_fg(self):
         (triple, hexstr) = askcolor()
         if hexstr:
             self.text.config(fg=hexstr)
@@ -104,57 +100,57 @@ class Format():
         date = day + '/' + month + '/' + year
         self.text.insert(tk.INSERT, date, "a")
 
+    def __init__(self, text, root, mainWin):
+        self.text = text
+        self.root = root
+        self.mainWin = mainWin
 
-def main(root, main_win, text):
-    objFormat = Format(text)
-    fontoptions = families(root)
-    font = Font(family="Verdana", size=10)
-    formatMenu = tk.Menu(main_win.menubar)
-    fsubmenu = tk.Menu(formatMenu, tearoff=0)
-    ssubmenu = tk.Menu(formatMenu, tearoff=0)
+        fontoptions = families(root)
+        font = Font(family="Verdana", size=10)
+        formatMenu = tk.Menu(mainWin.menubar, tearoff=0)
+        fsubmenu = tk.Menu(formatMenu, tearoff=0)
+        ssubmenu = tk.Menu(formatMenu, tearoff=0)
 
-    for option in fontoptions:
-        fsubmenu.add_command(label=option,
-                             command=lambda: font.configure(family=option))
-    for value in range(1, 31):
-        ssubmenu.add_command(label=str(value),
-                             command=lambda: font.configure(size=value))
+        for option in fontoptions:
+            fsubmenu.add_command(label=option,
+                                 command=lambda:
+                                     font.configure(family=option))
+        for value in range(1, 31):
+            ssubmenu.add_command(label=str(value),
+                                 command=lambda:
+                                     font.configure(size=value))
 
-    formatMenu.add_command(label="Change Background",
-                           command=objFormat.changeBg)
-    formatMenu.add_command(label="Change Font Color",
-                           command=objFormat.changeFg)
-    formatMenu.add_cascade(label="Font",
-                           underline=0, menu=fsubmenu)
-    formatMenu.add_cascade(label="Size",
-                           underline=0, menu=ssubmenu)
-    formatMenu.add_command(label="Bold",
-                           command=objFormat.bold,
-                           accelerator="Ctrl+B")
-    formatMenu.add_command(label="Italic",
-                           command=objFormat.italic,
-                           accelerator="Ctrl+I")
-    formatMenu.add_command(label="Underline",
-                           command=objFormat.underline,
-                           accelerator="Ctrl+U")
-    formatMenu.add_command(label="Overstrike",
-                           command=objFormat.overstrike,
-                           accelerator="Ctrl+T")
-    formatMenu.add_command(label="Add Date",
-                           command=objFormat.addDate)
-    main_win.menubar.add_cascade(label="Format",
-                        menu=formatMenu)
+        formatMenu.add_command(label="Change Background",
+                               command=self.change_bg)
+        formatMenu.add_command(label="Change Font Color",
+                               command=self.change_fg)
+        formatMenu.add_cascade(label="Font",
+                               underline=0, menu=fsubmenu)
+        formatMenu.add_cascade(label="Size",
+                               underline=0, menu=ssubmenu)
+        formatMenu.add_command(label="Bold",
+                               command=self.bold,
+                               accelerator="Ctrl+B")
+        formatMenu.add_command(label="Italic",
+                               command=self.italic,
+                               accelerator="Ctrl+I")
+        formatMenu.add_command(label="Underline",
+                               command=self.underline,
+                               accelerator="Ctrl+U")
+        formatMenu.add_command(label="Overstrike",
+                               command=self.overstrike,
+                               accelerator="Ctrl+T")
+        formatMenu.add_command(label="Add Date",
+                               command=self.addDate)
+        mainWin.menubar.add_cascade(label="Format",
+                                    menu=formatMenu)
 
-    root.bind_all("<Control-b>", objFormat.bold)
-    root.bind_all("<Control-i>", objFormat.italic)
-    root.bind_all("<Control-u>", objFormat.underline)
-    root.bind_all("<Control-T>", objFormat.overstrike)
+        root.bind_all("<Control-b>", self.bold)
+        root.bind_all("<Control-i>", self.italic)
+        root.bind_all("<Control-u>", self.underline)
+        root.bind_all("<Control-T>", self.overstrike)
 
-    root.grid_columnconfigure(0, weight=1)
-    root.resizable(True, True)
+        root.grid_columnconfigure(0, weight=1)
+        root.resizable(True, True)
 
-    root.config(menu=main_win.menubar)
-
-
-if __name__ == "__main":
-    print("Please run 'main.py'")
+        root.config(menu=mainWin.menubar)

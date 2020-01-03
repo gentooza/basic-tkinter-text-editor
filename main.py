@@ -52,7 +52,7 @@ class mainWindow:
     def build(self):
         self.fileMenu = file_menu.fileMenu(self.text, self.master, self)
         self.editMenu = edit_menu.editMenu(self.text, self.master, self)
-        format_menu.main(self.master, self, self.text)
+        self.formatMenu = format_menu.formatMenu(self.text, self.master, self)
         help_menu.main(self.master, self, self.text)
 
     def events(self):
@@ -75,7 +75,7 @@ class mainWindow:
             self.selectedText = None
         ''' update edit menu'''
         if oldSelectedText != self.selectedText:
-            self.edit_menu.update()
+            self.editMenu.update()
 
 
 root = tk.Tk()
