@@ -41,10 +41,10 @@ class mainWindow:
                                  height=400, width=400,
                                  wrap='word',
                                  font=self.font, pady=2,
-                                 padx=3, undo=True)
+                                 padx=3, undo=True, bg='white')
         self.text.pack(fill=tk.Y, expand=1)
         self.text.focus_set()
-        self.menubar = tk.Menu(self.master)
+        self.menubar = tk.Menu(self.master, relief=tk.FLAT)
         self.selectedText = None
         '''configure events'''
         self.events()
