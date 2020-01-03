@@ -23,24 +23,18 @@ If not, see <https://www.gnu.org/licenses/>.
 
 import tkinter as tk
 from tkinter.messagebox import showinfo
-import sys
 
 
-class Help():
+class helpMenu():
     def about(root):
+        my_msg = ("This a basic text editor implemented"
+                  "in Python's Tkinter")
         showinfo(title="About",
-                 message="This a simple text editor implemented in Python's Tkinter")
+                 message=my_msg)
 
+    def __init__(self, text, root, mainWin):
+        helpMenu = tk.Menu(mainWin.menubar, tearoff=0)
+        helpMenu.add_command(label="About", command=self.about)
+        mainWin.menubar.add_cascade(label="Help", menu=helpMenu)
 
-def main(root, main_win, text):
-    help = Help()
-
-    helpMenu = tk.Menu(main_win.menubar)
-    helpMenu.add_command(label="About", command=help.about)
-    main_win.menubar.add_cascade(label="Help", menu=helpMenu)
-
-    root.config(menu=main_win.menubar)
-
-
-if __name__ == "__main__":
-    print("Please run 'main.py'")
+        root.config(menu=mainWin.menubar)

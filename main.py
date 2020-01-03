@@ -53,7 +53,7 @@ class mainWindow:
         self.fileMenu = file_menu.fileMenu(self.text, self.master, self)
         self.editMenu = edit_menu.editMenu(self.text, self.master, self)
         self.formatMenu = format_menu.formatMenu(self.text, self.master, self)
-        help_menu.main(self.master, self, self.text)
+        self.helpMenu = help_menu.helpMenu(self.text, self.master, self)
 
     def events(self):
         self.text.bind("<<Selection>>", self.ev_selected_text)
