@@ -50,7 +50,7 @@ class main_window:
         self.events()
 
     def build(self):
-        file_menu.main(self.master, self, self.text)
+        self.fileMenu = file_menu.fileMenu(self.text, self.master, self)
         self.edit_menu = edit_menu.main(self.master, self, self.text)
         format_menu.main(self.master, self, self.text)
         help_menu.main(self.master, self, self.text)

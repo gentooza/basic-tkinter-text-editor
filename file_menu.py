@@ -21,20 +21,34 @@ along with Basic Simple Text Editor.
 If not, see <https://www.gnu.org/licenses/>.
 '''
 
-import my_globals
 import tkinter as tk
 import tkinter.filedialog as tkfiledialog
 import tkinter.messagebox as tkmessagebox
-import sys
 
 
-class File():
+class fileMenu():
 
-    def newFile(self):
+    def build_menu(self):
+        self.fileMenu.add_command(label="New",
+                                  command=self.new_file)
+        self.fileMenu.add_command(label="Open",
+                                  command=self.open_file)
+        self.fileMenu.add_command(label="Save",
+                                  command=self.save_file)
+        self.fileMenu.add_command(label="Save As...",
+                                  command=self.save_as)
+        self.fileMenu.add_separator()
+        self.fileMenu.add_command(label="Quit",
+                                  command=self.quit)
+        self.mainWin.menubar.add_cascade(label="File",
+                                         menu=self.fileMenu)
+        self.root.config(menu=self.mainWin.menubar)
+
+    def new_file(self):
         self.filename = "Untitled"
         self.text.delete(0.0, tk.END)
 
-    def saveFile(self):
+    def save_file(self):
         try:
             t = self.text.get(0.0, tk.END)
             f = open(self.filename, 'w')
@@ -43,7 +57,7 @@ class File():
         except:
             self.saveAs()
 
-    def saveAs(self):
+    def save_as(self):
         f = tkfiledialog.asksaveasfile(mode='w', defaultextension='.txt')
         t = self.text.get(0.0, tk.END)
         try:
@@ -52,7 +66,7 @@ class File():
             tkmessagebox.showerror(title="Oops!",
                                    message="Unable to save file...")
 
-    def openFile(self):
+    def open_file(self):
         f = tkfiledialog.askopenfile(mode='r')
         self.filename = f.name
         t = f.read()
@@ -66,32 +80,11 @@ class File():
         if entry is True:
             self.root.destroy()
 
-    def __init__(self, text, root, main_win):
-        self.filename = None
+    def __init__(self, text, root, mainWin):
+        self.fileName = None
         self.text = text
         self.root = root
-        self.main_win = main_win
+        self.mainWin = mainWin
 
-
-def main(root, main_win, text):
-    filemenu = tk.Menu(main_win.menubar)
-    objFile = File(text, root, main_win)
-
-    filemenu.add_command(label="New",
-                         command=objFile.newFile)
-    filemenu.add_command(label="Open",
-                         command=objFile.openFile)
-    filemenu.add_command(label="Save",
-                         command=objFile.saveFile)
-    filemenu.add_command(label="Save As...",
-                         command=objFile.saveAs)
-    filemenu.add_separator()
-    filemenu.add_command(label="Quit",
-                         command=objFile.quit)
-    main_win.menubar.add_cascade(label="File",
-                        menu=filemenu)
-    root.config(menu=main_win.menubar)
-
-
-if __name__ == "__main__":
-    print("Please run 'main.py'")
+        self.fileMenu = tk.Menu(mainWin.menubar, tearoff=0)
+        self.build_menu()
